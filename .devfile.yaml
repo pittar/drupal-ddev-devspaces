@@ -1,0 +1,41 @@
+schemaVersion: 2.2.2
+attributes:
+  controller.devfile.io/storage-type: per-workspace
+metadata:
+  name: "ddev"
+  provider: Andrew Pitt
+  displayName: DDEV Workspace
+  description: Drupal DDEV in Dev Spaces.
+  tags:
+    - Drupal
+    - PHP
+    - DDEV
+    - AI
+  projectType: Starter
+  language: PHP
+projects:
+  - name: "ddev"
+    git:
+      remotes:
+        origin: "https://github.com/pittar/drupal-ddev-devspaces.git"
+      checkoutFrom:
+        revision: "main"
+        remote: origin
+components:
+  - name: tools
+    container:
+      image: quay.io/pittar/custom-udi-demo:latest
+      args: ['tail', '-f', '/dev/null']
+      mountSources: true
+      cpuLimit: '4'
+      cpuRequest: '100m'
+      memoryLimit: '8G'
+      memoryRequest: '2G'
+commands:
+  - id: configure-opencode
+    exec:
+      component: tools
+      commandLine: "mkdir -p /home/user/.config/opencode && cp /data/opencode/*.* /home/user/.config/opencode/"
+events:
+  postStart:
+    - configure-opencode
